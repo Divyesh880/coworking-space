@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Coworking Space | Booking</title>
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css"> -->
     <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
@@ -46,9 +48,22 @@
             <div>
                 <!-- <h3 class="text-center">Book your seat</h3> -->
                 <div class="row_flex">
+                    <!-- <div class="col_flex">
+                        <label for="date-range">Booking Date</label>
+                        <input type="text" id="date-range" placeholder="Select Date Range" class="web_input_type">
+                    </div> -->
                     <div class="col_flex">
                         <label for="date">Booking Date</label>
                         <input type="date" id="date" name="date" class="web_input_type">
+                    </div>
+                    <div class="col_flex">
+                        <label for="stime">Start Time</label>
+                        <input type="time" id="stime" name="stime" class="web_input_type">
+                    </div>
+                    <span>To</span>
+                    <div class="col_flex">
+                        <label for="etime">End Time</label>
+                        <input type="time" id="etime" name="etime" class="web_input_type">
                     </div>
                     <!-- <div class="col_flex">
                         <label for="location">Type</label>
@@ -164,10 +179,7 @@
                             <div>
                                 <div><label for="desknum">Desk Number</label></div>
                                 <select name="desknum" id="desknum" class="modal_dropdown">
-                                    <option value="D1">D1</option>
-                                    <option value="D2">D2</option>
-                                    <option value="D3">D3</option>
-                                    <option value="D4">D4</option>
+                                   
                                 </select>
                             </div>
 
@@ -214,7 +226,74 @@
         </div>
     </div>
     <!-- End modal -->
-
+    <!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        // Date Range Picker
+        flatpickr("#date-range", {
+            mode: "range",
+            dateFormat: "d-m-Y",
+        });
+    </script> -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var deskSeats = document.querySelectorAll('.desk_seat');
+            var deskNumSelect = document.getElementById('desknum');
+            var currentlySelectedDesk = null;
+    
+            var deskNumbers = Array.from(deskSeats).filter(function(deskSeat) {
+                return !deskSeat.classList.contains('booked');
+            }).map(function(deskSeat) {
+                return deskSeat.textContent.trim();
+            });
+    
+            function updateDropdown() {
+                deskNumSelect.innerHTML = '';
+                deskNumbers.forEach(function(deskNumber) {
+                    var option = document.createElement('option');
+                    option.value = deskNumber;
+                    option.textContent = deskNumber;
+                    deskNumSelect.appendChild(option);
+                });
+            }
+    
+            updateDropdown();
+    
+            deskSeats.forEach(function(deskSeat) {
+                deskSeat.addEventListener('click', function() {
+                    if (this.classList.contains('booked')) {
+                        return; // Do nothing if the desk is booked
+                    }
+    
+                    var selectedDesk = this.textContent.trim(); // Get the text content of the clicked seat
+    
+                    deskSeats.forEach(function(seat) {
+                        seat.classList.remove('selected');
+                    });
+    
+                    this.classList.add('selected');
+                    currentlySelectedDesk = selectedDesk;
+    
+                    deskNumSelect.value = selectedDesk;
+    
+                });
+            });
+    
+            deskNumSelect.addEventListener('change', function() {
+                var selectedDesk = this.value;
+    
+                deskSeats.forEach(function(seat) {
+                    seat.classList.remove('selected');
+                });
+    
+                deskSeats.forEach(function(seat) {
+                    if (seat.textContent.trim() === selectedDesk) {
+                        seat.classList.add('selected');
+                        currentlySelectedDesk = selectedDesk;
+                    }
+                });
+            });
+        });
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
         var buttons = document.querySelectorAll('.multi_drop_btn');
@@ -253,16 +332,6 @@
             });
         });
     });
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var deskSeats = document.querySelectorAll('.desk_seat');
-            deskSeats.forEach(function(deskSeat) {
-                deskSeat.addEventListener('click', function() {
-                    this.classList.toggle('clicked');
-                });
-            });
-        });
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
